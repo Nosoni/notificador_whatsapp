@@ -1,5 +1,6 @@
 const express = require("express");
 const configuracion = require("./configuracion");
+const { send_message } = require("./framework");
 const app = express()
 app.use(express.json())
 
@@ -21,12 +22,10 @@ app.post("/webhook", (req, res) => {
       var message_data = body.entry[0].changes[0].value.messages[0];
 
       const phone_number_id = body.entry[0].changes[0].value.metadata.phone_number_id; //número de empresa
-      const cliente_phone_number = message_data.from; // número del cliente
-      const mensaje = message_data?.text?.body; // mensaje
+      const client_phone_number = message_data.from; // número del cliente
+      const message = message_data?.text?.body; // mensaje
 
-      console.log("mensaje enviado a ", phone_number_id)
-      console.log("mensaje enviado de ", cliente_phone_number)
-      console.log("mensaje", mensaje)
+      send_message({ phone_number_id, client_phone_number })
     }
     res.status(200).send();
   } else {
