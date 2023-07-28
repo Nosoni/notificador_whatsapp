@@ -2,7 +2,6 @@ const express = require("express");
 const configuration = require("./configuration");
 const { sendMessage } = require("./framework/response_send");
 const { buildMessage } = require("./framework/response_builder");
-const { getCustomerInfo, updateCustomerInfo } = require("./data");
 const app = express();
 app.use(express.json());
 
