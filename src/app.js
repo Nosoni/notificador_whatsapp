@@ -1,7 +1,7 @@
 const express = require("express");
 const configuration = require("./configuration");
 const { sendMessage } = require("./framework/response_send");
-const { buildMessage } = require("./framework/response_builder");
+const { message_handle } = require("./framework/message_handle");
 const app = express();
 app.use(express.json());
 
@@ -22,86 +22,9 @@ app.post("/webhook", async (req, res) => {
   const statuses = entryValue?.statuses;
   if (message_data && !statuses) {
     const { phone_number_id } = entryValue?.metadata;
-    const {
-      profile: { name: client_name },
-    } = entryValue?.contacts?.[0];
-    const { from: client_phone_number } = message_data;
-    const text_message = message_data?.text?.body;
-    let build_response;
-    let data = {};
+    message_data.client_name = entryValue?.contacts?.[0]?.profile?.name ?? "";
 
-    switch (text_message) {
-      case "list":
-        data = {
-          header: `Hola ${client_name}`,
-          body: "Soy Ramiro, tu asistente virtual.\nNos alegra que nos escribas.\n¿Qué deseas hacer?",
-          footer: "Elige una de las opciones",
-          options: [
-            {
-              id: 1,
-              title: "Lista 1",
-              descripcion: "Esta es la opción lista 1",
-            },
-            {
-              id: 2,
-              title: "Lista 2",
-              descripcion: "Esta es la opción lista 2",
-            },
-            {
-              id: 3,
-              title: "Lista 3",
-              descripcion: "Esta es la opción lista 3",
-            },
-          ],
-        };
-
-        build_response = buildMessage({
-          type: "interactive_list",
-          client_phone_number,
-          data,
-        });
-        break;
-      case "buttons":
-        data = {
-          header: `Hola ${client_name}`,
-          body: "Soy Ramiro, tu asistente virtual.\nNos alegra que nos escribas.\n¿Qué deseas hacer?",
-          footer: "Elige una de las opciones",
-          options: [
-            {
-              id: 1,
-              title: "Opción 1",
-            },
-            {
-              id: 2,
-              title: "Opción 2",
-            },
-            {
-              id: 3,
-              title: "Opción 3",
-            },
-          ],
-        };
-
-        build_response = buildMessage({
-          type: "interactive_buttons",
-          client_phone_number,
-          data,
-        });
-        break;
-      case "text":
-        build_response = buildMessage({
-          client_phone_number,
-          data: "welcome",
-        });
-        break;
-      default:
-        build_response = buildMessage({
-          client_phone_number,
-          data: `_Comandos_\n*text*: envía respuesta tipo texto\n*buttons*: envía respuesta de tipo botones\n*list*: envía respuesta de tipo lista`,
-        });
-        break;
-    }
-
+    const build_response = await message_handle(message_data);
     sendMessage({ phone_number_id, message: build_response });
   }
   res.status(200).send();
