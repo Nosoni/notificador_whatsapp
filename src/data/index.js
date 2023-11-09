@@ -28,9 +28,9 @@ const updateCustomerInfo = async (customerUpdated) => {
     );
 
     customers[index] = customerUpdated;
-    const dataUpdated = JSON.stringify({ customers });
+    const data_updated = JSON.stringify({ customers });
 
-    await fs.writeFile(dataPath, dataUpdated, "utf8");
+    await fs.writeFile(dataPath, data_updated, "utf8");
   } catch (error) {
     console.log(error);
   }
