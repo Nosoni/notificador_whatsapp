@@ -9,7 +9,7 @@ const greeting = (context) => {
     context.customer_info.convertation_started =
       !context.customer_info.convertation_started;
 
-  const dataButtons = {
+  const data_buttons = {
     header: `Hola ${client_name}`,
     body: "Soy Ramiro, tu asistente virtual.\nNos alegra que nos escribas.\n¿Qué deseas hacer?",
     footer: "Elige una de las opciones",
@@ -21,7 +21,7 @@ const greeting = (context) => {
     ],
   };
 
-  const dataList = {
+  const data_list = {
     header: `Hola ${client_name}`,
     body: "Soy Ramiro, tu asistente virtual.\nNos alegra que nos escribas.\n¿Qué deseas hacer?",
     footer: "Elige una de las opciones",
@@ -37,7 +37,7 @@ const greeting = (context) => {
   return buildMessage({
     type: "interactive_buttons",
     client_phone_number,
-    data: dataButtons,
+    data: data_buttons,
   });
 };
 
