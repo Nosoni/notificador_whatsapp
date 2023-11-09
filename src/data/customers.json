@@ -1,9 +1,1 @@
-{
-  "customers": [
-    {
-      "client_phone_number": "595981784238",
-      "client_name": "francisco",
-      "convertation_started": true
-    }
-  ]
-}
+{"customers":[{"client_phone_number":"595981784238","client_name":"francisco","convertation_started":true}]}

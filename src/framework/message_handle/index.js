@@ -1,42 +1,33 @@
 const { getCustomerInfo, updateCustomerInfo } = require("../../data");
 const { greeting } = require("../../handlers/greeting");
-const { getHander } = require("./message_helper");
+const { getHander, getMessageContent } = require("./helper");
 
-const message_handle = async (message_data) => {
+const messageHandle = async (message_data) => {
   const { from: client_phone_number, client_name } = message_data;
-  const interactive_message = message_data?.interactive;
-  const text_message = message_data?.text?.body;
-  let customerInfo = await getCustomerInfo(client_phone_number);
+  let customer_info = await getCustomerInfo(client_phone_number);
+  const message_content = getMessageContent(message_data);
 
-  if (!customerInfo) {
+  if (!customer_info) {
     /*crear customer info*/
-    customerInfo = {
+    customer_info = {
       client_phone_number,
       client_name,
       convertation_started: false,
     };
   }
 
-  let context = {
-    interactive_message,
-    text_message,
-    customerInfo: { ...customerInfo },
-  };
+  let context = { message_content, customer_info: { ...customer_info } };
 
   const handler = getHander(context);
   switch (handler) {
     case "greeting":
       build_response = greeting(context);
       break;
-
-    default:
-      build_response = greeting(context);
-      break;
   }
 
-  await updateCustomerInfo(context.customerInfo);
+  await updateCustomerInfo(context.customer_info);
 
   return build_response;
 };
 
-module.exports = { message_handle };
+module.exports = { messageHandle };
