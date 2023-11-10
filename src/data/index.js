@@ -2,14 +2,28 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const dataPath = path.join(__dirname, "customers.json");
 
-const getCustomerInfo = async (client_phone_number) => {
+const getCustomerInfo = async (message_data) => {
   try {
+    const { from: client_phone_number, client_name } = message_data;
+
     const { customers } = await fs
       .readFile(dataPath, "utf8")
       .then((dataFile) => JSON.parse(dataFile));
-    return customers.find(
+
+    let current_customer = customers.find(
       (customer) => customer.client_phone_number === client_phone_number
     );
+
+    if (!current_customer) {
+      /*crear customer info*/
+      current_customer = {
+        client_phone_number,
+        client_name,
+        convertation_started: false,
+      };
+    }
+
+    return current_customer;
   } catch (error) {
     console.log(error);
     return {};
