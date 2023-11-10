@@ -1,21 +1,18 @@
 const { buildInteractiveList } = require("./template/list");
 const { buildInteractiveButtons } = require("./template/buttons");
+const { message_type, message_response_type } = require("../../constants");
 
-//TODO type constantes
-const buildMessage = ({ type = "text", client_phone_number, data }) => {
-  let message = {
-    messaging_product: "whatsapp",
-    to: client_phone_number,
-  };
+const buildMessage = ({ type = message_response_type.text, data }) => {
+  let message = {};
 
   switch (type) {
-    case "interactive_list":
-      message.type = "interactive";
+    case message_response_type.interactive_list:
+      message.type = message_type.interactive;
       message.interactive = buildInteractiveList(data);
       break;
 
-    case "interactive_buttons":
-      message.type = "interactive";
+    case message_response_type.interactive_buttons:
+      message.type = message_type.interactive;
       message.interactive = buildInteractiveButtons(data);
       break;
 

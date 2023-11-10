@@ -2,12 +2,8 @@ const { buildMessage } = require("../framework/response_builder");
 
 const greeting = (context) => {
   const {
-    customer_info: { client_phone_number, client_name },
+    customer_info: { client_name },
   } = context;
-
-  if (!context.customer_info.convertation_started)
-    context.customer_info.convertation_started =
-      !context.customer_info.convertation_started;
 
   const data_buttons = {
     header: `Hola ${client_name}`,
@@ -35,9 +31,8 @@ const greeting = (context) => {
   };
 
   return buildMessage({
-    type: "interactive_buttons",
-    client_phone_number,
-    data: data_buttons,
+    type: "interactive_list",
+    data: data_list,
   });
 };
 

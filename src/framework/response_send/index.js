@@ -1,5 +1,5 @@
 const axios = require("axios");
-const configuration = require("../../configuration");
+const { token } = require("../../config");
 
 const sendMessage = ({ phone_number_id, message }) => {
   try {
@@ -7,7 +7,7 @@ const sendMessage = ({ phone_number_id, message }) => {
       method: "post",
       url: `https://graph.facebook.com/v14.0/${phone_number_id}/messages`,
       headers: {
-        Authorization: `Bearer ${configuration.token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       data: JSON.stringify(message),
